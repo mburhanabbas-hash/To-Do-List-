@@ -17,11 +17,16 @@ body {
     padding: 6px;
     border-radius: 5px;
     border: 1px solid #F0F0F0;
-    width: 300px;
+    width: 200px;
 }
 
 .main-input:focus {
     outline-color: lightgray;
+}
+.Main-form{
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
 }
 
 .add-btn {
@@ -53,14 +58,14 @@ body {
     background-color: white;
     padding-top: 20px;
     padding-bottom: 20px;
-    padding-left: 50px;
+    padding-left: 10px;
     padding-right: 50px;
     display: flex;
     gap: 30px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.05);
     transition: 0.3s;
     border-radius: 8px;
-    width: 500px;
+    width: 620px;
 }
 
 .top-section:hover {
@@ -80,7 +85,7 @@ body {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.05);
     transition: 0.3s;
     border-radius: 8px;
-    width: 500px;
+    width: 620px;
 
 
 }

@@ -13,66 +13,44 @@
 <body style="background-color: #B268F9;">
 
 
-    <div id="dataModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Select Day & Time</h2>
-            <form id="dataForm">
-                <label for="day">Day:</label>
-                <select id="day" name="day" required>
-                    <option value="">Select day</option>
-                    <option value="Monday">Monday</option>
-                    <option value="Tuesday">Tuesday</option>
-                    <option value="Wednesday">Wednesday</option>
-                    <option value="Thursday">Thursday</option>
-                    <option value="Friday">Friday</option>
-                    <option value="Saturday">Saturday</option>
-                    <option value="Sunday">Sunday</option>
-                </select>
-
-                <label for="time">Time:</label>
-                <input type="time" id="time" name="time" required>
-                <button type="submit" class="submit-btn">Save Data</button>
-            </form>
-        </div>
-    </div>
     <div class="container">
-        <div class="top-section">
-            <input class="main-input" id="user-data-typed" type="text" placeholder="Task Add To be Done..">
-            <button class="add-btn" id="add-btn">Add</button>
-            <button id="openBtn" class="open-btn"> SetTime</button>
-        </div>
-        <div class="bottom-section" id="bottom-section-adding">
-            <div class="bottom-card-inneritems" id="clone-content">
-                <div class="timing-and-work" style="display: flex; gap: 10px;">
-                    <input type="checkbox" id="checkbox" class="checkboxes">
-                    <div style="display: flex; flex-direction: column;">
-                        <span id="usertyped-text" class="usertyped-text" style=" font-weight: 700;">Buy Groceries</span>
-                        <span class="dateandtime"></span>
-                    </div>
+        <!-- TOP SECTION -->
+        <div class="top-section" style="display: flex; align-items: last baseline;" id="mr-top">
+            <form class="Main-form" action="" method="post">
+                <div>
+                    <input class="main-input" id="user-data-typed" type="text" placeholder="Task Add To be Done..">
                 </div>
-                <div style="display: flex; gap: 10px;">
-                    <div class="edit-icon" id="edit-id"> 
-                        <svg id="edit-section" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24">
-                            <path fill="#fcfcfc"
-                                d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583zM18.045 4.458l1.589 1.583l-1.597 1.582l-1.586-1.585zM9 13.417l6.03-5.973l1.586 1.586l-6.029 5.971L9 15.006z"
-                                stroke-width="0.5" stroke="#f1ebeb" />
-                            <path fill="#fcfcfc"
-                                d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"
-                                stroke-width="0.5" stroke="#f1ebeb" />
-                        </svg>
-                    </div>
-                    <div class="trash-div">
-                        <svg class="trash-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24">
-                            <path fill="none" stroke="red" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M4 7h16m-10 4v6m4-6v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" />
-                        </svg>
-                    </div>
-                </div>  
-            </div>
+                <div style="display: flex; align-items:center ; gap: 20px;">
+                    <form id="dataForm" style="display: flex ; gap: 20px;">
+                        <div>
+                            <select id="day" name="day" required style="padding: 5px;">
+                                <option value="">Select day</option>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                                <option value="Sunday">Sunday</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <input type="time" id="time" name="time" required style="padding: 4px;">
+                        </div>
+
+                    </form>
+
+                </div>
+                <div>
+                    <button type="submit" class="add-btn" id="add-btn">Add</button>
+                </div>
+            </form>
+
+        </div>
+        <!-- BOTTOM SECTION -->
+        <div class="bottom-section" id="bottom-section-adding">
+        <span id="notaskspan" style="display: flex; height: fit-content ;" >no task Added<p id="NoofTasks"></p></span>
         </div>
     </div>
 
