@@ -1,5 +1,0 @@
-Host github.com-personal
-    HostName github.com
-    User git
-    identityFile ~/.ssh/mburhanabbas-hash
-
