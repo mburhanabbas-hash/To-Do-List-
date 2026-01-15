@@ -81,6 +81,7 @@ LoginForm.addEventListener("submit", async (e) => {
 
   const email = LoginForm['login-email'].value;
   const password = LoginForm['login-password'].value;
+  const LoginError = document.getElementById('Error-Login')
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
@@ -92,6 +93,7 @@ LoginForm.addEventListener("submit", async (e) => {
     LoginForm.reset();
   } catch (error) {
     console.error("Invalid email or password");
+    LoginError.style.display = "block"
   }
 });
 
@@ -111,3 +113,13 @@ LogoutBtn.addEventListener('click', async (e) => {
     console.error(err);
   }
 });
+
+
+
+
+// const checkbox = document.querySelector('.checkboxes')
+// const checked  = false
+// if(checkbox){
+//     textSpan.style.textDecoration = "line-through dashed";
+//     timeSpan.style.textDecoration = "line-through dashed";
+// }

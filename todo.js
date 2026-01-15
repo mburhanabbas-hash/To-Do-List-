@@ -28,6 +28,8 @@ const Topform = document.querySelector('form');
 
 let currentUserUID = null;
 
+
+
 function createCloneElement(tododata, key, checked = false) {
   const clone = document.createElement('div');
   clone.classList.add('bottom-card-inneritems');
@@ -60,7 +62,10 @@ function createCloneElement(tododata, key, checked = false) {
     textSpan.style.textDecoration = "line-through dashed";
     timeSpan.style.textDecoration = "line-through dashed";
   }
-
+  if (!checked) {
+    textSpan.style.textDecoration = "none";
+    timeSpan.style.textDecoration = "none";
+  }
   textTimeDiv.append(textSpan, timeSpan);
   timingDiv.append(checkbox, textTimeDiv);
 
@@ -68,7 +73,6 @@ function createCloneElement(tododata, key, checked = false) {
   btnDiv.style.display = 'flex';
   btnDiv.style.gap = '10px';
 
-  /* -------- YOUR ORIGINAL EDIT ICON -------- */
   const editBtn = document.createElement('div');
   editBtn.classList.add('edit-icon');
   editBtn.innerHTML = `
@@ -82,7 +86,6 @@ function createCloneElement(tododata, key, checked = false) {
     </svg>
   `;
 
-  /* -------- YOUR ORIGINAL DELETE ICON -------- */
   const deleteBtn = document.createElement('div');
   deleteBtn.classList.add('trash-div');
   deleteBtn.innerHTML = `
@@ -125,25 +128,26 @@ async function AddingData() {
   UserData.value = "";
   updateTaskCount();
 }
+
 export async function loadUserTasks() {
-    if (!currentUserUID || tasksLoaded) return;
-  
-    tasksLoaded = true;
-    PrintingCloneContainer.innerHTML = "";
-  
-    const snapshot = await getDocs(
-      collection(db, "users", currentUserUID, "tasks")
-    );
-  
-    snapshot.forEach(docSnap => {
-      const data = docSnap.data();
-      const clone = createCloneElement(data, docSnap.id, data.checked);
-      PrintingCloneContainer.appendChild(clone);
-    });
-  
-    updateTaskCount();
-  }
-  
+  if (!currentUserUID || tasksLoaded) return;
+
+  tasksLoaded = true;
+  PrintingCloneContainer.innerHTML = "";
+
+  const snapshot = await getDocs(
+    collection(db, "users", currentUserUID, "tasks")
+  );
+
+  snapshot.forEach(docSnap => {
+    const data = docSnap.data();
+    const clone = createCloneElement(data, docSnap.id, data.checked);
+    PrintingCloneContainer.appendChild(clone);
+  });
+
+  updateTaskCount();
+}
+
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     PrintingCloneContainer.innerHTML = "";
@@ -173,17 +177,15 @@ PrintingCloneContainer.addEventListener("click", async (e) => {
 
   const taskId = item.dataset.key;
 
-  // DELETE
   if (e.target.closest('.trash-div')) {
-    await deleteDoc(doc(db, "users", currentUserUID, "tasks", taskId));
+    await deleteDoc(doc(db, "users", currentUserUID,));
     item.remove();
     updateTaskCount();
   }
 
-  // CHECKBOX
   if (e.target.classList.contains('checkboxes')) {
     await updateDoc(
-      doc(db, "users", currentUserUID, "tasks", taskId),
+      doc(db, "users", currentUserUID,),
       { checked: e.target.checked }
     );
   }
@@ -194,4 +196,5 @@ function updateTaskCount() {
   NumberofTasks.innerText = total;
   NoTaskspan.style.display = total === 0 ? "flex" : "none";
 }
+
 

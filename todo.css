@@ -141,7 +141,11 @@ body {
 
 
 
-
+.checkboxes{
+    position: relative !important;
+    opacity: 1 !important;
+    pointer-events: fill !important;
+}
 
 
 
