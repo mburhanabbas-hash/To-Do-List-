@@ -1,8 +1,1 @@
-# Ignore a specific file
-package.json
-package-lock.json
-# Ignore an entire directory
 /node_modules/
-
-# Ignore all files with a specific extension
-*.vscode

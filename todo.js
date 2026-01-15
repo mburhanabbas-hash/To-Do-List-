@@ -29,7 +29,6 @@ const Topform = document.querySelector('form');
 let currentUserUID = null;
 
 
-
 function createCloneElement(tododata, key, checked = false) {
   const clone = document.createElement('div');
   clone.classList.add('bottom-card-inneritems');
