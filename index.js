@@ -1,6 +1,5 @@
 import { app } from "./firebaseConfig.js";
 
-/* ---------------- FIREBASE IMPORTS ---------------- */
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -9,13 +8,10 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-/* ---------------- UI IMPORT ---------------- */
 import { loadUserTasks } from "./todo.js";
 
-/* ---------------- INIT ---------------- */
 const auth = getAuth(app);
 
-/* ---------------- DOM ---------------- */
 const logOutBtn = document.getElementById('logout-btn');
 const SignUpBtnUI = document.getElementById('sign-upbtn');
 const LoginBtnUI = document.getElementById('login-btn');
@@ -25,16 +21,13 @@ const SignUpForm = document.querySelector("#signup");
 const LoginForm = document.querySelector("#login-form");
 const LogoutBtn = document.querySelector('#logout');
 
-/* ---------------- DEFAULT UI ---------------- */
 logOutBtn.style.display = "none";
 
-/* ---------------- MATERIALIZE MODALS INIT ---------------- */
 document.addEventListener('DOMContentLoaded', function () {
   const modals = document.querySelectorAll('.modal');
   M.Modal.init(modals, { dismissible: true });
 });
 
-/* ---------------- UI SETUP ---------------- */
 const setupUI = (user) => {
   if (user) {
     taskContainer.style.display = "block";
@@ -50,25 +43,25 @@ const setupUI = (user) => {
   }
 };
 
-/* ---------------- AUTH STATE ---------------- */
+let tasksLoaded = true
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
+    tasksLoaded = false;
     setupUI(null);
     return;
   }
 
   console.log("Logged in:", user.email);
   setupUI(user);
-  await loadUserTasks();
+  loadUserTasks()
 });
 
-/* ---------------- SIGN UP ---------------- */
 SignUpForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const email = SignUpForm['signup-email'].value;
   const password = SignUpForm['signup-password'].value;
-
+  const errorContainer = document.getElementById("signup-error")
   try {
     await createUserWithEmailAndPassword(auth, email, password);
 
@@ -79,10 +72,10 @@ SignUpForm.addEventListener("submit", async (e) => {
     SignUpForm.reset();
   } catch (error) {
     console.error(error.message);
+    errorContainer.style.display = "block"
   }
 });
 
-/* ---------------- LOGIN ---------------- */
 LoginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -102,7 +95,6 @@ LoginForm.addEventListener("submit", async (e) => {
   }
 });
 
-/* ---------------- LOGOUT ---------------- */
 LogoutBtn.addEventListener('click', async (e) => {
   e.preventDefault();
 

@@ -15,11 +15,10 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-/* -------------------- INIT -------------------- */
 const db = getFirestore(app);
 const auth = getAuth(app);
+let tasksLoaded = false;
 
-/* -------------------- DOM -------------------- */
 const UserData = document.getElementById('user-data-typed');
 const AddBtn = document.getElementById('add-btn');
 const PrintingCloneContainer = document.getElementById('bottom-section-adding');
@@ -29,7 +28,6 @@ const Topform = document.querySelector('form');
 
 let currentUserUID = null;
 
-/* -------------------- UI CLONE -------------------- */
 function createCloneElement(tododata, key, checked = false) {
   const clone = document.createElement('div');
   clone.classList.add('bottom-card-inneritems');
@@ -100,7 +98,6 @@ function createCloneElement(tododata, key, checked = false) {
   return clone;
 }
 
-/* -------------------- ADD TASK -------------------- */
 async function AddingData() {
   if (!currentUserUID) return;
 
@@ -128,27 +125,25 @@ async function AddingData() {
   UserData.value = "";
   updateTaskCount();
 }
-
-/* -------------------- LOAD TASKS -------------------- */
 export async function loadUserTasks() {
-  if (!currentUserUID) return;
-
-  PrintingCloneContainer.innerHTML = "";
-
-  const snapshot = await getDocs(
-    collection(db, "users", currentUserUID, "tasks")
-  );
-
-  snapshot.forEach(docSnap => {
-    const data = docSnap.data();
-    const clone = createCloneElement(data, docSnap.id, data.checked);
-    PrintingCloneContainer.appendChild(clone);
-  });
-
-  updateTaskCount();
-}
-
-/* -------------------- AUTH LISTENER -------------------- */
+    if (!currentUserUID || tasksLoaded) return;
+  
+    tasksLoaded = true;
+    PrintingCloneContainer.innerHTML = "";
+  
+    const snapshot = await getDocs(
+      collection(db, "users", currentUserUID, "tasks")
+    );
+  
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      const clone = createCloneElement(data, docSnap.id, data.checked);
+      PrintingCloneContainer.appendChild(clone);
+    });
+  
+    updateTaskCount();
+  }
+  
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     PrintingCloneContainer.innerHTML = "";
@@ -160,7 +155,6 @@ onAuthStateChanged(auth, async (user) => {
   await loadUserTasks();
 });
 
-/* -------------------- EVENTS -------------------- */
 AddBtn.addEventListener("click", (e) => {
   e.preventDefault();
   AddingData();
@@ -186,6 +180,7 @@ PrintingCloneContainer.addEventListener("click", async (e) => {
     updateTaskCount();
   }
 
+  // CHECKBOX
   if (e.target.classList.contains('checkboxes')) {
     await updateDoc(
       doc(db, "users", currentUserUID, "tasks", taskId),
@@ -199,3 +194,4 @@ function updateTaskCount() {
   NumberofTasks.innerText = total;
   NoTaskspan.style.display = total === 0 ? "flex" : "none";
 }
+

@@ -11,6 +11,10 @@ body {
         left: 15%;
     position: absolute;
 }
+.Error-div{
+    display: none;
+    color: red;
+}
 
 .main-input {
     padding: 6px;
