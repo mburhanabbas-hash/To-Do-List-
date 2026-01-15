@@ -1,3 +1,5 @@
+
+
 const UserData = document.getElementById('user-data-typed');
 const AddBtn = document.getElementById('add-btn');
 const PrintingCloneContainer = document.getElementById('bottom-section-adding');
@@ -10,12 +12,16 @@ const NoTaskspan = document.getElementById('notaskspan')
 const NumberofTasks = document.getElementById('NoofTasks')
 const value = UserData.value.trim();
 
-
+let currentUserUID = null;
 let selectedDay = "";
 let selectedTime = "";
 let itemBeingEdited = null;
 let editTarget = null;
 let counterkey = localStorage.length
+
+const activeUser = localStorage.getItem("activeUser");
+
+
 
 
 
@@ -29,11 +35,16 @@ function createCloneElement(tododata, key, checked = false) {
     timingDiv.classList.add('timing-and-work');
     timingDiv.style.display = 'flex';
     timingDiv.style.gap = '10px';
-
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.classList.add('checkboxes');
     checkbox.checked = checked;
+
+    checkbox.style.opacity = "1";
+    checkbox.style.position = "relative";
+    checkbox.style.pointerEvents = "auto";
+    checkbox.style.display = "inline-block";
+
 
     const textTimeDiv = document.createElement('div');
     textTimeDiv.style.display = 'flex';
@@ -81,6 +92,7 @@ function createCloneElement(tododata, key, checked = false) {
     clone.appendChild(timingDiv);
     clone.appendChild(btnDiv);
 
+
     return clone;
 }
 
@@ -100,6 +112,7 @@ AddBtn.addEventListener("click", (event) => {
     event.preventDefault();
     AddingData();
     NoTaskspan.style.display = "none"
+
 });
 
 // Adding Data and set that data Into LocalStorage 
@@ -146,12 +159,14 @@ function AddingData(formElement) {
         text: value,
         time: `${selectedDay.value} at ${selectedTime.value}`,
         isChecked: false
-    };
+      };
+     
 
     // Save in localStorage
-    localStorage.setItem(`data_${counterkey}`, tododata.text);
-    localStorage.setItem(`time_${counterkey}`, tododata.time);
-    localStorage.setItem(`check_${counterkey}`, "false");
+    localStorage.setItem(`${activeUser}_data_${counterkey}`, tododata.text);
+    localStorage.setItem(`${activeUser}_time_${counterkey}`, tododata.time);
+    localStorage.setItem(`${activeUser}_check_${counterkey}`, "false");
+
 
     // Clone template and fill
     const clone = createCloneElement(tododata, counterkey, false);
@@ -177,7 +192,7 @@ function AddingData(formElement) {
 
 // Printing Clone Container
 
-PrintingCloneContainer.addEventListener('click', (e) => {
+ PrintingCloneContainer.addEventListener('click', (e) => {
 
 
     // trashBtn
@@ -188,9 +203,9 @@ PrintingCloneContainer.addEventListener('click', (e) => {
 
         const key = cloneToRemove.dataset.key;
         if (key) {
-            localStorage.removeItem(`data_${key}`);
-            localStorage.removeItem(`time_${key}`);
-            localStorage.removeItem(`check_${key}`);
+            localStorage.removeItem(`${activeUser}_data_${key}`);
+            localStorage.removeItem(`${activeUser}_time_${key}`);
+            localStorage.removeItem(`${activeUser}_check_${key}`);
         }
 
         if (cloneToRemove === editTarget) {
@@ -200,7 +215,7 @@ PrintingCloneContainer.addEventListener('click', (e) => {
 
         cloneToRemove.remove();
         updateTaskCount();
-        return;
+        return ;
     }
 
     // checkboxes 
@@ -213,16 +228,16 @@ PrintingCloneContainer.addEventListener('click', (e) => {
         const key = clone.dataset.key;
         const textSpan = clone.querySelector('#usertyped-text');
         const timeSpan = clone.querySelector('.dateandtime');
-
         if (checkbox.checked) {
             textSpan.style.textDecoration = "line-through dashed";
             timeSpan.style.textDecoration = "line-through dashed";
-            localStorage.setItem(`check_${key}`, "true");
+            localStorage.setItem(`${activeUser}_check_${key}`, "true");
         } else {
             textSpan.style.textDecoration = "none";
             timeSpan.style.textDecoration = "none";
-            localStorage.setItem(`check_${key}`, "false");
+            localStorage.setItem(`${activeUser}_check_${key}`, "false");
         }
+
         return;
     }
 
@@ -240,38 +255,7 @@ PrintingCloneContainer.addEventListener('click', (e) => {
 
 // On page Reload to get datas Fro local Storage
 window.addEventListener('DOMContentLoaded', () => {
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-
-        if (key.startsWith("data_")) {
-            const index = key.split("_")[1];
-
-            const text = localStorage.getItem(`data_${index}`);
-            const time = localStorage.getItem(`time_${index}`);
-            const checked = localStorage.getItem(`check_${index}`) === "true";
-
-            const clone = createCloneElement({ text, time }, index, checked);
-            clone.dataset.key = index;
-            clone.querySelector('#usertyped-text').innerText = text;
-            clone.querySelector('.dateandtime').innerText = time;
-
-
-            const checkbox = clone.querySelector('.checkboxes');
-            checkbox.checked = checked;
-
-            if (checked) {
-                clone.querySelector('#usertyped-text').style.textDecoration = "line-through dashed";
-                clone.querySelector('.dateandtime').style.textDecoration = "line-through dashed";
-            } else {
-                clone.querySelector('#usertyped-text').style.textDecoration = "none";
-                clone.querySelector('.dateandtime').style.textDecoration = "none";
-            }
-
-
-            PrintingCloneContainer.appendChild(clone);
-            updateTaskCount()
-        }
-    }
+    loadUserTasks();
 });
 
 // Updating Task Count  
@@ -288,4 +272,63 @@ function updateTaskCount() {
 
 
 
-localStorage.setItem("name", "Irfan")
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    var modals = document.querySelectorAll('.modal');
+    M.Modal.init(modals);
+
+    var items = document.querySelectorAll('.collapsible');
+    M.Collapsible.init(items);
+
+});
+
+
+const taskItems = document.getElementById('bottom-section-adding');
+console.log(taskItems)
+//   Setup Tasks
+
+window.SetupTasks = (data) => {
+    let html = '';
+    data.forEach(doc => {
+        const guide = doc.data();
+        console.log(guide);
+    });
+};
+
+export function loadUserTasks() {
+    const activeUser = localStorage.getItem("activeUser");
+    if (!activeUser) return [];
+
+    PrintingCloneContainer.innerHTML = "";
+
+    const tasks = [];
+
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+
+        if (key.startsWith(`${activeUser}_data_`)) {
+            const index = key.split("_").pop();
+
+            const text = localStorage.getItem(`${activeUser}_data_${index}`);
+            const time = localStorage.getItem(`${activeUser}_time_${index}`);
+            const checked = localStorage.getItem(`${activeUser}_check_${index}`) === "true";
+
+            if (!text || !time) continue;
+
+            tasks.push({
+                id: index,
+                text,
+                time,
+                checked
+            });
+
+            const clone = createCloneElement({ text, time }, index, checked);
+            clone.dataset.key = index;
+            PrintingCloneContainer.appendChild(clone);
+        }
+    }
+
+    updateTaskCount();
+    return tasks;
+}
