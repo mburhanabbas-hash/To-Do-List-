@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>To Do Application</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="chat.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+</head>
+
+<body style=" background-color: #B268F9;">
+
+    <div id="Message-modal" class="container"
+        style="position: fixed; top: 10%; left: 30%; width: 600px;background-color: white;height: auto; padding: 20px;">
+        <div class="modal-contents" id="modals">
+
+        </div>
+        <div id="group-chat" style="margin-top:15px; justify-content: flex-end;">
+            <div id="messages" style="height:300px; overflow-y:auto; justify-content: flex-end;"></div>
+            <div style="display:flex; gap:8px; margin-top:10px; justify-content: flex-end;">
+              <input id="messageInput" type="text" class="form-control" placeholder="Type message..." />
+              <button id="sendBtn" class="btn btn-primary">Send</button>
+            </div>
+          </div>
+          
+    </div>
+    </div>
+
+    <script type="module" src="./chat.js"></script>
+
+
+</body>
+
+</html>

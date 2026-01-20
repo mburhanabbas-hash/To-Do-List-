@@ -1,7 +1,14 @@
 body {
-    background-color: #B268F9;
+    background-color: #B268F9 !important;
 }
-
+.userInfo{
+    background-color: #9400d3;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 60%;
+}
 .container {
     display: flex;
     justify-content: center;
@@ -17,20 +24,33 @@ body {
 }
 
 .main-input {
-    padding: 6px;
-    border-radius: 5px;
-    border: 1px solid #F0F0F0;
-    width: 200px;
+    /* padding: 6px !important; */
+    border-radius: 5px !important;
+    border: 1px solid #F0F0F0 !important;
+    width: 200px !important;
 }
-
+.UserEmail{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 500;
+}
+.main-input::placeholder{
+    padding-left: 5px;
+}
 .main-input:focus {
-    outline-color: lightgray;
+    outline-color: lightgray !important;
 }
-
+.Time-Section{
+    
+}
+.time-input{
+    border: 1px solid #F2F2F2 !important;
+    height: 2rem !important;
+}
 .Main-form {
-    display: flex;
+    display: flex !important;
     justify-content: space-between;
-    gap: 50px;
+    gap: 30px;
+    align-items: last baseline !important;
 }
 
 .add-btn {
@@ -125,12 +145,11 @@ body {
 
 .bottom-card-inneritems {
     display: flex;
-    /* gap: 270px; */
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid lightgray;
     padding-bottom: 8px;
-    /* margin-top: 14px; */
+    margin-top: 14px;
 }
 
 .Text-span {
@@ -171,13 +190,16 @@ body {
 
 .modal-content {
     background-color: #fefefe;
-    padding: 20px;
     border-radius: 8px;
-    width: 250px !important;
+    width: 300px !important;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: absolute;
-    left: 66%;
     top: 10%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
 }
 
 .close-btn {
@@ -212,6 +234,7 @@ body {
 .edit-icon {
     background-color: #815CF2;
     padding: 7px;
+    /* margin-right: -29px; */
     width: 40px;
     border-radius: 5px;
     justify-content: flex-end;
@@ -298,7 +321,10 @@ body {
     padding: 5px;
     border: none;
 }
-
+.pro-img{
+    width:50px;
+    border-radius: 50%;
+}
 .google-icon {
     width: 150px;
     display: flex;
@@ -317,4 +343,61 @@ body {
 
 .right {
     float: none !important;
+}
+
+
+.Main-Icon{
+    position: fixed; 
+    bottom: 20px;    
+    right: 20px;     
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.modal-message{
+    display: none;
+    position: absolute;
+    width: 250px;
+    box-shadow: none !important;
+    background-color:transparent !important;
+    max-height: 100%;
+  
+}
+
+.modal-contents{
+    background-color: white !important;
+    height: 400px;
+    width: 300px;
+    display: flex;
+    position: fixed;
+    padding: 10px;
+    border-radius: 10px;
+    right: 5px;
+    top:100px;
+    display: flex;
+    flex-direction: column;
+}
+.Add-Chat-name{
+  padding: 5px;
+  background-color: #B268F9;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 600;
+}
+
+
+.Send-icon{
+    background-color: #815CF2;
+    border-radius: 10px;
+    padding: 5px;
+    color: white;
+    height: 2.2rem;
+}
+
+.Showmessages{
+    display: flex;
+    justify-content: flex-end;
 }

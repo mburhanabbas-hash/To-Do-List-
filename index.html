@@ -11,7 +11,7 @@
 
 </head>
 
-<body style="background-color: #B268F9;" class="grey lighten-3">
+<body style="background-color: #B268F9">
 
     <!-- NAVBAR -->
     <nav class="z-depth-0 grey lighten-4" style="background-color: white !important; padding: 10px;">
@@ -33,7 +33,7 @@
                     <li class="logged-in">
                         <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
                     </li>
-                 
+
                     <li class="logged-in">
                         <a href="#" class="grey-text modal-trigger" data-target="modal-create">Create Guide</a>
                     </li>
@@ -49,8 +49,9 @@
                     </span>
                 </ul>
             </div>
-
-        </div>
+            <div>
+                <img class="pro-img" id="userProfilepicture">
+            </div>
 
 
     </nav>
@@ -119,7 +120,7 @@
                 </div>
 
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <div class="google-icon">
+                    <div class="google-icon" id="GoogleBtn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48">
                             <path fill="#ffc107"
                                 d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917"
@@ -171,7 +172,8 @@
                     <input type="password" id="login-password" required />
                     <label for="login-password">Your password</label>
                 </div>
-                <span class="login-Error" id="Error-Login" style="color: red; display: none;">Enter a valid email or password</span>
+                <span class="login-Error" id="Error-Login" style="color: red; display: none;">Enter a valid email or
+                    password</span>
                 <button class="btn yellow darken-2 z-depth-0">Login</button>
             </form>
         </div>
@@ -181,10 +183,25 @@
     <div id="modal-account" class="modal">
         <div class="modal-content center-align">
             <h4>Account details</h4><br />
-            <div class="account-details"></div>
+            <div class="account-details" style="display: flex; flex-direction: column; gap: 20px;">
+                <div style="display: flex; justify-content: space-between; gap: 10px;">
+                    <span class="UserEmail">Email :</span>
+                    <span class="Typed-email" id="UserEmail"></span>
+                </div>
+                <div style="display: flex; justify-content: space-between; gap: 10px;">
+                    <span class="UserEmail">Password :</span>
+                    <span class="Typed-email" id="UserPassword"></span>
+                    <svg class="Showpassord" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24">
+                        <g fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6s4.03-6 9-6s9 4.8 9 6Z" />
+                            <path d="M15 12a3 3 0 1 1-6 0a3 3 0 0 1 6 0Z" />
+                        </g>
+                    </svg>
+                </div>
+            </div>
         </div>
     </div>
-
     <!-- CREATE GUIDE MODAL -->
     <div id="modal-create" class="modal">
         <div class="modal-content">
@@ -202,7 +219,7 @@
             </form>
         </div>
     </div>
-
+   
     <!-- GUIDE LIST -->
     <div class="container" style="margin-top: 40px;">
         <!-- TOP SECTION -->
@@ -211,25 +228,23 @@
                 <div>
                     <input class="main-input" id="user-data-typed" type="text" placeholder="Task Add To be Done..">
                 </div>
-                <div style="display: flex; align-items:center ; gap: 20px; width: 100px;">
-                    <div>
-                        <select id="day" name="day" style="padding: 5px; width: 110px; display: flex !important;">
-                            <option value="">Select day</option>
-                            <option value="Monday">Monday</option>
-                            <option value="Tuesday">Tuesday</option>
-                            <option value="Wednesday">Wednesday</option>
-                            <option value="Thursday">Thursday</option>
-                            <option value="Friday">Friday</option>
-                            <option value="Saturday">Saturday</option>
-                            <option value="Sunday">Sunday</option>
-                        </select>
-                    </div>
-                    <div>
-                        <input type="time" id="time" name="time" style="padding: 4px;">
-                    </div>
-                    <div style="margin-left: 20px;">
-                        <button type="submit" class="add-btn" id="add-btn">Add</button>
-                    </div>
+                <div class="select-input">
+                    <select id="day" name="day" style="padding: 5px; width: 110px; display: flex !important;">
+                        <option value="">Select day</option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
+                    </select>
+                </div>
+                <div class="Time-Section">
+                    <input class="time-input" type="time" id="time" name="time" style="padding: 6px !important;">
+                </div>
+                <div style="margin-left: 20px;">
+                    <button type="submit" class="add-btn" id="add-btn" style="padding: 13px;">Add</button>
                 </div>
             </form>
 
@@ -242,14 +257,35 @@
             </div>
         </div>
     </div>
-
-
+<!-- here is the chat icons  -->
+    <div class="message-icon">
+        <svg class="Main-Icon" id="message-btn" xmlns="http://www.w3.org/2000/svg" width="54" height="54"
+            viewBox="0 0 24 24">
+            <g fill="none">
+                <path fill="#B268F9"
+                    d="M19.174 1H4.826A3.826 3.826 0 0 0 1 4.826v14.348A3.826 3.826 0 0 0 4.826 23h14.348A3.826 3.826 0 0 0 23 19.174V4.826A3.826 3.826 0 0 0 19.174 1" />
+                <path fill="#B268F9"
+                    d="M19.174 1H4.826A3.826 3.826 0 0 0 1 4.826v14.348a3.8 3.8 0 0 0 1.36 2.902L22.076 2.359A3.8 3.8 0 0 0 19.174 1" />
+                <path stroke="#191919" stroke-linecap="round" stroke-linejoin="round"
+                    d="M19.174 1H4.826A3.826 3.826 0 0 0 1 4.826v14.348A3.826 3.826 0 0 0 4.826 23h14.348A3.826 3.826 0 0 0 23 19.174V4.826A3.826 3.826 0 0 0 19.174 1"
+                    stroke-width="1" />
+                <path fill="#fff" stroke="#191919" stroke-linecap="round" stroke-linejoin="round"
+                    d="M19.174 11.402c0 3.232-3.212 5.853-7.174 5.853a8.6 8.6 0 0 1-2.514-.37l-4.122 1.92l1.614-3.223a5.38 5.38 0 0 1-2.152-4.18C4.826 8.174 8.038 5.55 12 5.55s7.174 2.625 7.174 5.853"
+                    stroke-width="1" />
+                <path stroke="#191919"
+                    d="M8.891 12a.239.239 0 1 1 0-.478m0 .478a.239.239 0 1 0 0-.478M12.24 12a.24.24 0 0 1 0-.478m0 .478a.239.239 0 1 0 0-.478m3.346.478a.24.24 0 0 1 0-.478m0 .478a.239.239 0 1 0 0-.478"
+                    stroke-width="1" />
+            </g>
+        </svg>
+    </div>
 
     <!-- Compiled and minified JavaScript -->
     <script src="index.js" type="module"></script>
     <script src="todo.js" type="module"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
+    <script>
+     
+    </script>
 </body>
 
 </html>

@@ -7,6 +7,10 @@ import {
   getDocs,
   deleteDoc,
   doc,
+  setDoc,
+  onSnapshot,
+  query,
+  orderBy,
   updateDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -14,11 +18,13 @@ import {
   getAuth,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+export {
+  PrintingCloneContainer,
+  updateTaskCount
+};
 
 const db = getFirestore(app);
 const auth = getAuth(app);
-let tasksLoaded = false;
-
 const UserData = document.getElementById('user-data-typed');
 const AddBtn = document.getElementById('add-btn');
 const PrintingCloneContainer = document.getElementById('bottom-section-adding');
@@ -27,7 +33,8 @@ const NumberofTasks = document.getElementById('NoofTasks');
 const Topform = document.querySelector('form');
 
 let currentUserUID = null;
-
+let tasksLoaded = false
+let editingTaskId = null;
 
 function createCloneElement(tododata, key, checked = false) {
   const clone = document.createElement('div');
@@ -57,14 +64,10 @@ function createCloneElement(tododata, key, checked = false) {
   timeSpan.classList.add('dateandtime');
   timeSpan.innerText = tododata.time;
 
-  if (checked) {
-    textSpan.style.textDecoration = "line-through dashed";
-    timeSpan.style.textDecoration = "line-through dashed";
-  }
-  if (!checked) {
-    textSpan.style.textDecoration = "none";
-    timeSpan.style.textDecoration = "none";
-  }
+  const style = checked ? "line-through dashed" : "none";
+  textSpan.style.textDecoration = style;
+  timeSpan.style.textDecoration = style;
+
   textTimeDiv.append(textSpan, timeSpan);
   timingDiv.append(checkbox, textTimeDiv);
 
@@ -75,31 +78,31 @@ function createCloneElement(tododata, key, checked = false) {
   const editBtn = document.createElement('div');
   editBtn.classList.add('edit-icon');
   editBtn.innerHTML = `
-    <svg id="edit-section" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-      <path fill="#fcfcfc"
-        d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583z"
-        stroke="#f1ebeb" stroke-width="0.5"/>
-      <path fill="#fcfcfc"
-        d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"
-        stroke="#f1ebeb" stroke-width="0.5"/>
-    </svg>
-  `;
+      <svg id="edit-section" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path fill="#fcfcfc"
+          d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583z"
+          stroke="#f1ebeb" stroke-width="0.5"/>
+        <path fill="#fcfcfc"
+          d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"
+          stroke="#f1ebeb" stroke-width="0.5"/>
+      </svg>
+    `;
 
   const deleteBtn = document.createElement('div');
   deleteBtn.classList.add('trash-div');
   deleteBtn.innerHTML = `
-    <svg class="trash-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-      <path fill="none" stroke="red" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-        d="M4 7h16m-10 4v6m4-6v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/>
-    </svg>
-  `;
+      <svg class="trash-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path fill="none" stroke="red" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M4 7h16m-10 4v6m4-6v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/>
+      </svg>
+    `;
 
   btnDiv.append(editBtn, deleteBtn);
   clone.append(timingDiv, btnDiv);
 
   return clone;
 }
-
+// 
 async function AddingData() {
   if (!currentUserUID) return;
 
@@ -112,19 +115,42 @@ async function AddingData() {
   const taskData = {
     text,
     time: `${day} at ${time}`,
-    checked: false,
-    createdAt: Date.now()
+    checked: false
   };
 
-  const docRef = await addDoc(
-    collection(db, "users", currentUserUID, "tasks"),
-    taskData
-  );
+  if (editingTaskId) {
+    await updateDoc(
+      doc(db, "users", currentUserUID, "tasks", editingTaskId),
+      taskData
+    );
 
-  const clone = createCloneElement(taskData, docRef.id, false);
-  PrintingCloneContainer.appendChild(clone);
+    const item = PrintingCloneContainer.querySelector(
+      `[data-key="${editingTaskId}"]`
+    );
+
+    item.querySelector('.usertyped-text').innerText = taskData.text;
+    item.querySelector('.dateandtime').innerText = taskData.time;
+
+    editingTaskId = null;
+    AddBtn.innerText = "Add";
+  }
+  else {
+    const docRef = await addDoc(
+      collection(db, "users", currentUserUID, "tasks"),
+      {
+        ...taskData,
+        createdAt: Date.now()
+      }
+    );
+
+    const clone = createCloneElement(taskData, docRef.id, false);
+    PrintingCloneContainer.appendChild(clone);
+  }
 
   UserData.value = "";
+  document.getElementById("day").value = "";
+  document.getElementById("time").value = "";
+
   updateTaskCount();
 }
 
@@ -148,19 +174,25 @@ export async function loadUserTasks() {
 }
 
 onAuthStateChanged(auth, async (user) => {
+  tasksLoaded = false;
+
   if (!user) {
+    currentUserUID = null;
     PrintingCloneContainer.innerHTML = "";
     updateTaskCount();
     return;
   }
 
   currentUserUID = user.uid;
-  await loadUserTasks();
 });
 
 AddBtn.addEventListener("click", (e) => {
+  const day = document.getElementById("day");
+  const time = document.getElementById("time");
   e.preventDefault();
   AddingData();
+  day.value = ""
+  time.value = ""
 });
 
 Topform.addEventListener("keydown", (e) => {
@@ -177,17 +209,84 @@ PrintingCloneContainer.addEventListener("click", async (e) => {
   const taskId = item.dataset.key;
 
   if (e.target.closest('.trash-div')) {
-    await deleteDoc(doc(db, "users", currentUserUID,));
+    await deleteDoc(
+      doc(db, "users", currentUserUID, "tasks", taskId)
+    );
     item.remove();
     updateTaskCount();
   }
 
   if (e.target.classList.contains('checkboxes')) {
+    const checked = e.target.checked;
+
     await updateDoc(
-      doc(db, "users", currentUserUID,),
-      { checked: e.target.checked }
+      doc(db, "users", currentUserUID, "tasks", taskId),
+      { checked }
     );
+
+    const textSpan = item.querySelector('.usertyped-text');
+    const timeSpan = item.querySelector('.dateandtime');
+
+    const style = checked ? "line-through dashed" : "none";
+    textSpan.style.textDecoration = style;
+    timeSpan.style.textDecoration = style;
   }
+
+  if (e.target.closest('.edit-icon')) {
+    const textSpan = item.querySelector('.usertyped-text');
+    const timeSpan = item.querySelector('.dateandtime');
+
+    UserData.value = textSpan.innerText;
+
+    const [dayPart, timePart] = timeSpan.innerText.split(" at ");
+    document.getElementById("day").value = dayPart || "";
+    document.getElementById("time").value = timePart || "";
+
+    editingTaskId = taskId;
+
+    AddBtn.innerText = "Save";
+  }
+  if (e.target.closest('.edit-icon')) {
+    const editBtn = e.target.closest('.edit-icon');
+
+    if (editBtn.dataset.editing === "true") {
+      const textInput = item.querySelector('input[type="text"]:first-child');
+      const timeInput = item.querySelector('input[type="text"]:last-child');
+
+      const updatedText = textInput.value.trim();
+      const updatedTime = timeInput.value.trim();
+
+      if (!updatedText || !updatedTime) return;
+
+      await updateDoc(
+        doc(db, "users", currentUserUID, "tasks", taskId),
+        {
+          text: updatedText,
+          time: updatedTime
+        }
+      );
+
+      const newTextSpan = document.createElement('span');
+      newTextSpan.classList.add('usertyped-text');
+      newTextSpan.innerText = updatedText;
+      newTextSpan.style.fontWeight = "700";
+
+      const newTimeSpan = document.createElement('span');
+      newTimeSpan.classList.add('dateandtime');
+      newTimeSpan.innerText = updatedTime;
+
+      textInput.replaceWith(newTextSpan);
+      timeInput.replaceWith(newTimeSpan);
+
+      editBtn.dataset.editing = "false";
+      return;
+    }
+
+    enableEditMode(item);
+    editBtn.dataset.editing = "true";
+  }
+
+
 });
 
 function updateTaskCount() {
@@ -195,5 +294,3 @@ function updateTaskCount() {
   NumberofTasks.innerText = total;
   NoTaskspan.style.display = total === 0 ? "flex" : "none";
 }
-
-
