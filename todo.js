@@ -135,18 +135,15 @@ async function AddingData() {
     AddBtn.innerText = "Add";
   }
   else {
-    const docRef = await addDoc(
+    await addDoc(
       collection(db, "users", currentUserUID, "tasks"),
       {
         ...taskData,
         createdAt: Date.now()
       }
     );
-
-    const clone = createCloneElement(taskData, docRef.id, false);
-    PrintingCloneContainer.appendChild(clone);
   }
-
+  
   UserData.value = "";
   document.getElementById("day").value = "";
   document.getElementById("time").value = "";
@@ -154,23 +151,28 @@ async function AddingData() {
   updateTaskCount();
 }
 
-export async function loadUserTasks() {
+export function loadUserTasks() {
   if (!currentUserUID || tasksLoaded) return;
 
   tasksLoaded = true;
   PrintingCloneContainer.innerHTML = "";
 
-  const snapshot = await getDocs(
-    collection(db, "users", currentUserUID, "tasks")
+  const q = query(
+    collection(db, "users", currentUserUID, "tasks"),
+    orderBy("createdAt", "asc")
   );
 
-  snapshot.forEach(docSnap => {
-    const data = docSnap.data();
-    const clone = createCloneElement(data, docSnap.id, data.checked);
-    PrintingCloneContainer.appendChild(clone);
-  });
+  onSnapshot(q, (snapshot) => {
+    PrintingCloneContainer.innerHTML = "";
 
-  updateTaskCount();
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      const clone = createCloneElement(data, docSnap.id, data.checked);
+      PrintingCloneContainer.appendChild(clone);
+    });
+
+    updateTaskCount();
+  });
 }
 
 onAuthStateChanged(auth, async (user) => {
@@ -184,6 +186,8 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   currentUserUID = user.uid;
+
+   loadUserTasks();
 });
 
 AddBtn.addEventListener("click", (e) => {

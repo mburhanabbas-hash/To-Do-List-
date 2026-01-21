@@ -12,7 +12,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import {
   getFirestore,
-    doc,
+  doc,
   setDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -34,18 +34,30 @@ logOutBtn.style.display = "none";
 
 
 
+const modals = document.querySelectorAll('.modal');
 document.addEventListener('DOMContentLoaded', function () {
-  const modals = document.querySelectorAll('.modal');
   M.Modal.init(modals, { dismissible: true });
-
 });
+
+function closeAllModals() {
+  modals.forEach(modalElement => {
+    const instance = M.Modal.getInstance(modalElement);
+    
+    if (instance) {
+      instance.close();
+    }
+  });
+}
+
+
+
 
 const setupUI = (user) => {
   if (user) {
     taskContainer.style.display = "block";
     logOutBtn.style.display = "block";
     SignUpBtnUI.style.display = "none";
-    LoginBtnUI.style.display = "none  ";
+    LoginBtnUI.style.display = "none";
   } else {
     taskContainer.style.display = "none";
     taskContainer.innerHTML = "";
@@ -54,15 +66,22 @@ const setupUI = (user) => {
     LoginBtnUI.style.display = "block";
   }
 };
+
 onAuthStateChanged(auth, (user) => {
-  if (!user) return;
+  // if (!user) return;
   setupUI(user)
   saveUserToFirestore(user);
   loadAllChatUsers();
+    closeAllModals()
+  const MessageIcon = document.getElementById("message-btn");
+  if (MessageIcon) {
+    MessageIcon.addEventListener("click", () => {
+      window.location.href = "chat.html";
+      console.log("kakak")
+    });
+  }
+
 });
-
-
-
 
 SignUpForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -130,7 +149,6 @@ LogoutBtn.addEventListener('click', async (e) => {
 
 
 
-
 // function for getting user email and password to store data in account details 
 const UserEmailStoring = document.getElementById("UserEmail")
 const UserPasswordStoring = document.getElementById('UserPassword')
@@ -151,7 +169,7 @@ GoogleBtn.addEventListener("click", function () {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const user = result.user;
       updateUserProfile(user)
-      
+
       console.log(user)
     }).catch((error) => {
       const errorCode = error.code;
@@ -202,6 +220,7 @@ function updateUserProfile(user) {
 async function saveUserToFirestore(user) {
   if (!user) return;
 
+  
   await setDoc(
     doc(db, "userData", user.uid),
     {
@@ -214,14 +233,4 @@ async function saveUserToFirestore(user) {
     { merge: true }
   );
 }
-
-
-const MessageIcon = document.getElementById("message-btn");
-
-if (MessageIcon) {
-  MessageIcon.addEventListener("click", () => {
-    window.location.href = "chat.html";
-  });
-}
-
 

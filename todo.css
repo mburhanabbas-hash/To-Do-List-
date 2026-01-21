@@ -1,7 +1,8 @@
 body {
     background-color: #B268F9 !important;
 }
-.userInfo{
+
+.userInfo {
     background-color: #9400d3;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -9,51 +10,69 @@ body {
     padding-right: 5px;
     border-radius: 60%;
 }
-.container {
-    display: flex;
-    justify-content: center;
-    /* gap: 40px; */
-    flex-direction: column;
-    align-items: center;
-        left: 15%;
-    position: absolute;
-}
-.Error-div{
+
+
+.Error-div {
     display: none;
     color: red;
 }
 
+.containers {
+    display: flex !important;
+    justify-content: space-around !important;
+
+}
+
 .main-input {
-    /* padding: 6px !important; */
+    padding: 6px !important;
     border-radius: 5px !important;
     border: 1px solid #F0F0F0 !important;
     width: 200px !important;
 }
-.UserEmail{
+
+.UserEmail {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: 500;
 }
-.main-input::placeholder{
+
+.main-input::placeholder {
     padding-left: 5px;
 }
+
 .main-input:focus {
     outline-color: lightgray !important;
 }
-.Time-Section{
-    
-}
-.time-input{
+
+.Time-Section {}
+
+.time-input {
     border: 1px solid #F2F2F2 !important;
     height: 2rem !important;
+    border-radius: 5px;
+    padding: 16px;
 }
+
 .Main-form {
     display: flex !important;
     justify-content: space-between;
     gap: 30px;
     align-items: last baseline !important;
+    flex-wrap: wrap;
 }
 
 .add-btn {
+    border-radius: 5px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: none;
+    background-color: #815CF2;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+}
+.login-btn{
     border-radius: 5px;
     padding-top: 7px;
     padding-bottom: 7px;
@@ -90,7 +109,9 @@ body {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.05);
     transition: 0.3s;
     border-radius: 8px;
-    width: 620px;
+
+    /* width: 673px; */
+    flex-wrap: wrap;
 }
 
 .top-section:hover {
@@ -110,10 +131,11 @@ body {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.05);
     transition: 0.3s;
     border-radius: 8px;
-    width: 620px;
+    width: 673px;
 
 
 }
+
 
 .Planit-logo {
     font-family: "font-family: " Plus Jakarta Sans", sans-serif;";
@@ -147,7 +169,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid lightgray;
+    /* border-bottom: 1px solid lightgray; */
     padding-bottom: 8px;
     margin-top: 14px;
 }
@@ -158,9 +180,16 @@ body {
 }
 
 
+#modal-signup {
+    /* display: flex; */
+    justify-content: center;
+    height: fit-content;
+    position: absolute;
+    top: 20%;
+    
+}
 
-
-.checkboxes{
+.checkboxes {
     position: relative !important;
     opacity: 1 !important;
     pointer-events: fill !important;
@@ -179,14 +208,10 @@ body {
     position: absolute;
     width: 250px;
     box-shadow: none !important;
-    background-color:transparent !important;
+    background-color: transparent !important;
     max-height: 100%;
 }
-#modal-signup{
-    background-color: white;
-    max-height: 100%;
-    width: 100%;
-}
+
 
 .modal-content {
     background-color: #fefefe;
@@ -321,10 +346,12 @@ body {
     padding: 5px;
     border: none;
 }
-.pro-img{
-    width:50px;
+
+.pro-img {
+    width: 50px;
     border-radius: 50%;
 }
+
 .google-icon {
     width: 150px;
     display: flex;
@@ -346,25 +373,25 @@ body {
 }
 
 
-.Main-Icon{
-    position: fixed; 
-    bottom: 20px;    
-    right: 20px;     
+.Main-Icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     font-size: 30px;
     cursor: pointer;
 }
 
-.modal-message{
+.modal-message {
     display: none;
     position: absolute;
     width: 250px;
     box-shadow: none !important;
-    background-color:transparent !important;
+    background-color: transparent !important;
     max-height: 100%;
-  
+
 }
 
-.modal-contents{
+.modal-contents {
     background-color: white !important;
     height: 400px;
     width: 300px;
@@ -373,23 +400,24 @@ body {
     padding: 10px;
     border-radius: 10px;
     right: 5px;
-    top:100px;
+    top: 100px;
     display: flex;
     flex-direction: column;
 }
-.Add-Chat-name{
-  padding: 5px;
-  background-color: #B268F9;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  color: white;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 600;
+
+.Add-Chat-name {
+    padding: 5px;
+    background-color: #B268F9;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
 }
 
 
-.Send-icon{
+.Send-icon {
     background-color: #815CF2;
     border-radius: 10px;
     padding: 5px;
@@ -397,7 +425,76 @@ body {
     height: 2.2rem;
 }
 
-.Showmessages{
+.Showmessages {
     display: flex;
     justify-content: flex-end;
+}
+
+.logged-in {
+    background-color: #B268F9;
+    padding: 10px;
+    border-radius: 8px;
+    color: white !important;
+    cursor: pointer;
+}
+
+.logged-out {
+    background-color: #B268F9;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+
+}
+
+.modal-trigger {
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+}
+
+
+@media screen and (max-width: 600px) {
+
+    .top-section {
+        width: 500px;
+        flex-wrap: wrap;
+    }
+
+    .cartoon-img {
+        display: none;
+    }
+
+    .userdiv {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 400px) {
+
+
+    .top-section {
+        width: 350px;
+        flex-wrap: wrap;
+    }
+
+    .cartoon-img {
+        display: none;
+    }
+
+    .userdiv {
+        display: none;
+    }
+
+    .right {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+
+    .top-section {
+        width: 673px;
+        flex-wrap: wrap;
+    }
 }

@@ -5,7 +5,9 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const chatContainer = document.getElementById("modals");
-const chatUserName = document.getElementById("UserName");   
+const chatUserName = document.getElementById("UserName");
+const renderedMessageIds = new Set();
+let unsubscribeMessages = null;
 
 
 export async function loadAllChatUsers() {
@@ -23,7 +25,7 @@ export async function loadAllChatUsers() {
         snapshot.forEach((docSnap) => {
             const user = docSnap.data();
             const img = document.createElement("img");
-            img.src = user.photoURL || "https://cdn-icons-png.flaticon.com/512/149/149071.png" ; 
+            img.src = user.photoURL || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
             img.style.width = "45px";
             img.style.height = "45px";
             img.style.borderRadius = "50%";
@@ -45,7 +47,7 @@ onAuthStateChanged(auth, (user) => {
     loadAllChatUsers();
 });
 
-export const messagesDiv = document.getElementById("messages");
+ const messagesDiv = document.getElementById("messages");
 const messageInput = document.getElementById("messageInput");
 const sendBtn = document.getElementById("sendBtn");
 if (messagesDiv) {
@@ -57,54 +59,95 @@ if (messagesDiv) {
 let currentUser = null;
 
 onAuthStateChanged(auth, (user) => {
-    if (!user) return;
+    if (!user) {
+        currentUser = null;
+
+        if (unsubscribeMessages) {
+            unsubscribeMessages();
+            unsubscribeMessages = null;
+        }
+
+        if (messagesDiv) messagesDiv.innerHTML = "";
+        renderedMessageIds.clear();
+        return;
+    }
 
     currentUser = user;
     listenToGroupMessages();
 });
 
+// handle send btn on click on send btn and pressing enter to send message
 
 if (sendBtn) {
-    sendBtn.addEventListener("click", sendMessage);
+    sendBtn.addEventListener("click", sendMessage)
 }
 
+// messageInput.addEventListener("keydown", (e) => {
+//     if (e.key === "Enter") {
+//         sendMessage()
+//     }
+// });
+
 async function sendMessage() {
-    if (!messageInput.value.trim() || !currentUser) return;
+    const text = messageInput.value.trim();
+    if (!text || !currentUser) return;
+
+    const clientId = `${currentUser.uid}_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+
+    renderMessage({
+        text,
+        senderId: currentUser.uid,
+        senderName: currentUser.displayName || "User",
+        senderPhoto: currentUser.photoURL || "",
+        clientId
+    });
+
+    renderedMessageIds.add(clientId);
+    messageInput.value = "";
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
     await addDoc(
         collection(db, "groups", "global", "messages"),
         {
-            text: messageInput.value.trim(),
+            text,
             senderId: currentUser.uid,
             senderName: currentUser.displayName || "User",
             senderPhoto: currentUser.photoURL || "",
+            clientId,
             createdAt: serverTimestamp()
         }
     );
-
-    messageInput.value = "";
 }
 
 function listenToGroupMessages() {
+    if (unsubscribeMessages) unsubscribeMessages();
+
     const q = query(
         collection(db, "groups", "global", "messages"),
         orderBy("createdAt")
     );
-    
-    onSnapshot(q, (snapshot) => {
-        const messagesDiv = document.getElementById("messages");
-        messagesDiv.textContent = "";
-        snapshot.forEach((doc) => {
-            const msg = doc.data();
-            renderMessage(msg);
+
+    unsubscribeMessages = onSnapshot(q, (snapshot) => {
+        if (!messagesDiv || !currentUser) return;
+
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+                const msg = change.doc.data();
+
+                if (msg.clientId && renderedMessageIds.has(msg.clientId)) return;
+
+                renderedMessageIds.add(msg.clientId);
+                renderMessage(msg);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }
         });
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
 }
 
 function renderMessage(messg) {
-    const isMyAccount = messg.senderId === currentUser.uid;
+    if (!messagesDiv || !currentUser) return;
 
+    const isMyAccount = messg.senderId === currentUser.uid;
     const wrapper = document.createElement("div");
     wrapper.style.display = "flex";
     wrapper.style.justifyContent = isMyAccount ? "flex-end" : "flex-start";
@@ -114,25 +157,22 @@ function renderMessage(messg) {
     msgDiv.style.display = "flex";
     msgDiv.style.alignItems = "center";
     msgDiv.style.gap = "8px";
-    msgDiv.style.maxWidth = "70%";
+    msgDiv.style.maxWidth = "50%";
     msgDiv.style.padding = "8px 12px";
     msgDiv.style.borderRadius = "12px";
     msgDiv.style.background = isMyAccount ? "#d1e7ff" : "#f1f1f1";
 
     msgDiv.innerHTML = isMyAccount
-        ? `
-          <span>${messg.text}</span>
-          <img src="${messg.senderPhoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}"
-               style="width:32px;height:32px;border-radius:50%" />
-        `
-        : `
-          <img src="${messg.senderPhoto || 'https://via.placeholder.com/32'}"
-               style="width:32px;height:32px;border-radius:50%" />
-          <span>${messg.text}</span>
-        `;
+        ? `<span>${messg.text}</span>
+           <img src="${messg.senderPhoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}"
+                style="width:32px;height:32px;border-radius:50%" />`
+        : `<img src="${messg.senderPhoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}"
+                style="width:32px;height:32px;border-radius:50%" />
+           <span>${messg.text}</span>`;
 
     wrapper.appendChild(msgDiv);
     messagesDiv.appendChild(wrapper);
 }
+
 
 

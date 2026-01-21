@@ -7,59 +7,60 @@
     <link rel="stylesheet" href="todo.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
 
 </head>
 
 <body style="background-color: #B268F9">
 
     <!-- NAVBAR -->
-    <nav class="z-depth-0 grey lighten-4" style="background-color: white !important; padding: 10px;">
+    <nav class="z-depth-0 grey lighten-4" style="background-color: white;">
         <div class="nav-wrapper containers"
-            style="display: flex; align-items: last baseline; justify-content: space-around; margin-top: 8px;">
+            style="display: flex; align-items: last baseline; justify-content: space-between; padding-top: 9px;">
             <div style="display: flex; align-items: center;">
-                <a href="#" class="brand-logo">
+                <a class="brand-logo">
                     <img class="" style="width: 70px;" src="./images/image (2)(1).jpg">
                 </a>
-                <span class="Planit-logo" style="font-size: 24px; padding-left: 74px;">
+                <span class="Planit-logo" style="font-size: 24px; padding-left: 4px;">
                     PlanIt
                 </span>
             </div>
-
-            <div>
-                <ul id="nav-mobile" class="right hide-on-med-and-down"
-                    style="float: none !important; display: flex; justify-content: flex-end;">
-                    style="display: flex; gap: 40px; list-style: none; justify-content: end;">
-                    <li class="logged-in">
-                        <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
-                    </li>
-
-                    <li class="logged-in">
-                        <a href="#" class="grey-text modal-trigger" data-target="modal-create">Create Guide</a>
-                    </li>
-                    <li class="logged-in" id="logout-btn">
-                        <a href="#" class="grey-text" id="logout">Logout</a>
-                    </li>
-                    <li class="logged-out" id="login-btn">
-                        <a href="#" class="grey-text modal-trigger" data-target="modal-login">Login</a>
-                    </li>
-                    <li class="logged-out" id="sign-upbtn">
-                        <a href="signinpage.html" class="grey-text modal-trigger" data-target="modal-signup">Sign up</a>
-                    </li>
-                    </span>
-                </ul>
-            </div>
-            <div>
-                <img class="pro-img" id="userProfilepicture">
+            <div style="display: flex; gap: 70px;">
+                <div>
+                    <ul id="nav-mobile" class="right hide-on-med-and-down"
+                        style="display: flex; gap: 30px; align-items: center;">
+                        <li class="logged-in" style="list-style: none;">
+                            <a class="grey-text modal-trigger" data-target="modal-account">Account</a>
+                        </li>
+                        <li class="logged-in" id="logout-btn">
+                            <a class="grey-text modal-trigger" id="logout">Logout</a>
+                        </li>
+                        <li class="logged-out" id="login-btn">
+                            <a class="grey-text modal-trigger" data-target="modal-login">Login</a>
+                        </li>
+                        <li class="logged-out" id="sign-upbtn">
+                            <a class="grey-text modal-trigger" data-target="modal-signup">Sign
+                                up</a>
+                        </li>
+                        </span>
+                    </ul>
+                </div>
+                <div class="userdiv">
+                    <img class="pro-img" id="userProfilepicture"
+                        src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
+                </div>
             </div>
 
+        </div>
 
     </nav>
 
+
+    <img class="cartoon-img" style="width: 200px; position:absolute;right: 100px; bottom: 30px;  " src="./images/slazzer-preview-xsq7e.png ">
     <!-- SIGN UP MODAL -->
-    <div id="modal-signup" class="modal" style="height: 100%; width:514px !important">
-        <div class="container"
-            style="width: 450px; display: flex; align-items: center; background-color: white !important; ">
+    <div id="modal-signup" class="modal">
+        <div class="containerss"
+            style="display: flex; align-items: center; background-color: white; padding: 20px;width: fit-content; ">
 
             <div style="padding-top: 10px; padding-bottom: 10px; padding-right: 20px; width: 400px;">
 
@@ -165,16 +166,16 @@
             <h4>Login</h4><br />
             <form id="login-form">
                 <div class="input-field">
-                    <input type="email" id="login-email" required />
                     <label for="login-email">Email address</label>
+                    <input type="email" id="login-email" required />
                 </div>
                 <div class="input-field">
-                    <input type="password" id="login-password" required />
                     <label for="login-password">Your password</label>
+                    <input type="password" id="login-password" required />
                 </div>
                 <span class="login-Error" id="Error-Login" style="color: red; display: none;">Enter a valid email or
                     password</span>
-                <button class="btn yellow darken-2 z-depth-0">Login</button>
+                <button class="login-btn">Login</button>
             </form>
         </div>
     </div>
@@ -219,17 +220,17 @@
             </form>
         </div>
     </div>
-   
+
     <!-- GUIDE LIST -->
     <div class="container" style="margin-top: 40px;">
         <!-- TOP SECTION -->
-        <div class="top-section" style="display: flex; align-items: last baseline;" id="mr-top">
+        <div class="top-section " style="display: flex; align-items: last baseline;" id="mr-top">
             <form class="Main-form" action="" method="post" style="display: flex; align-items: center;">
                 <div>
                     <input class="main-input" id="user-data-typed" type="text" placeholder="Task Add To be Done..">
                 </div>
                 <div class="select-input">
-                    <select id="day" name="day" style="padding: 5px; width: 110px; display: flex !important;">
+                    <select id="day" name="day" style="padding: 5px; width: 110px; display: flex !important; border-color: #F0F0F0 ;border-radius: 5px;">
                         <option value="">Select day</option>
                         <option value="Monday">Monday</option>
                         <option value="Tuesday">Tuesday</option>
@@ -244,7 +245,7 @@
                     <input class="time-input" type="time" id="time" name="time" style="padding: 6px !important;">
                 </div>
                 <div style="margin-left: 20px;">
-                    <button type="submit" class="add-btn" id="add-btn" style="padding: 13px;">Add</button>
+                    <button type="submit" class="add-btn" id="add-btn" style="margin-right: 6px;">Add</button>
                 </div>
             </form>
 
@@ -257,7 +258,7 @@
             </div>
         </div>
     </div>
-<!-- here is the chat icons  -->
+    <!-- here is the chat icons  -->
     <div class="message-icon">
         <svg class="Main-Icon" id="message-btn" xmlns="http://www.w3.org/2000/svg" width="54" height="54"
             viewBox="0 0 24 24">
@@ -284,7 +285,7 @@
     <script src="todo.js" type="module"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
-     
+
     </script>
 </body>
 
