@@ -37,7 +37,17 @@ logOutBtn.style.display = "none";
 const modals = document.querySelectorAll('.modal');
 document.addEventListener('DOMContentLoaded', function () {
   M.Modal.init(modals, { dismissible: true });
-});  
+});
+
+function closeAllModals() {
+  modals.forEach(modalElement => {
+    const instance = M.Modal.getInstance(modalElement);
+    
+    if (instance) {
+      instance.close();
+    } 
+  });
+}
 
 
 const setupUI = (user) => {
