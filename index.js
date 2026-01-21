@@ -37,7 +37,8 @@ logOutBtn.style.display = "none";
 const modals = document.querySelectorAll('.modal');
 document.addEventListener('DOMContentLoaded', function () {
   M.Modal.init(modals, { dismissible: true });
-});
+});  
+
 
 const setupUI = (user) => {
   if (user) {
