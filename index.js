@@ -11,7 +11,7 @@ import {
   signInWithPopup,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import {
-  getFirestore,
+  getFirestore, 
   doc,
   setDoc,
   serverTimestamp
@@ -45,11 +45,9 @@ function closeAllModals() {
     
     if (instance) {
       instance.close();
-    }
+    } 
   });
 }
-
-
 
 
 const setupUI = (user) => {
