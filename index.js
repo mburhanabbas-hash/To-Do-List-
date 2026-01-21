@@ -39,17 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
   M.Modal.init(modals, { dismissible: true });
 });
 
-function closeAllModals() {
-  modals.forEach(modalElement => {
-    const instance = M.Modal.getInstance(modalElement);
-    
-    if (instance) {
-      instance.close();
-    } 
-  });
-}
-
-
 const setupUI = (user) => {
   if (user) {
     taskContainer.style.display = "block";
