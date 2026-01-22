@@ -173,7 +173,9 @@ body {
     padding-bottom: 8px;
     margin-top: 14px;
 }
-
+.hiddendiv.common {
+    display: none;
+}
 .Text-span {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: 500;
@@ -457,7 +459,7 @@ body {
 @media screen and (max-width: 600px) {
 
     .top-section {
-        width: 500px;
+        width: min-content;
         flex-wrap: wrap;
     }
 
@@ -468,13 +470,22 @@ body {
     .userdiv {
         display: none;
     }
+    .bottom-section{
+        width: min-content;
+    }
+    .contain{
+        left: 0;
+    }
+    .Main-form{
+        width: min-content;
+    }
 }
 
 @media screen and (max-width: 400px) {
 
 
     .top-section {
-        width: 350px;
+        width: fit-content;
         flex-wrap: wrap;
     }
 
@@ -489,12 +500,37 @@ body {
     .right {
         display: none;
     }
+    .bottom-section{
+        width: min-content;
+        flex-wrap: wrap;
+        display: flex;
+    }
+    .contain{
+        left: 0;
+    }
+    .bottom-card-inneritems{
+        width: min-content;
+        flex-wrap: wrap;
+    }
+    .edit-icon{
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+    .trash-div{
+        margin-top: 10px;
+        margin-left: 10px;
+    }
 }
 
 @media screen and (min-width: 1200px) {
 
     .top-section {
         width: 673px;
-        flex-wrap: wrap;
     }
+}
+
+.contain{
+    position: relative;
+    left: 10%;
+    width: fit-content;
 }

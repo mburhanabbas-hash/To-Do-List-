@@ -175,19 +175,6 @@ GoogleBtn.addEventListener("click", function () {
     });
 
 })
-// window.DOMContentLoaded = () =>{
-// getRedirectResult(auth)
-//   .then((result) => {
-//     // This gives you a Google Access Token. You can use it to access Google APIs.
-//     const credential = GoogleAuthProvider.credentialFromResult(result);
-//     const user = result.user;
-
-//   }).catch((error) => {
-//     const errorCode = error.code;
-//     const errorMessage = error.message;
-
-//   });
-// }
 
 const UserProfileName = document.getElementById("username")
 function updateUserProfile(user) {
