@@ -22,6 +22,9 @@ body {
     justify-content: space-around !important;
 
 }
+.containerss{
+    margin:  0 auto;
+}
 
 .main-input {
     padding: 6px !important;

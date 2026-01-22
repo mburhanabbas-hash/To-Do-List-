@@ -11,7 +11,7 @@ import {
   signInWithPopup,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import {
-  getFirestore, 
+  getFirestore,
   doc,
   setDoc,
   serverTimestamp
@@ -29,23 +29,31 @@ const taskContainer = document.getElementById('bottom-section-adding');
 const SignUpForm = document.querySelector("#signup");
 const LoginForm = document.querySelector("#login-form");
 const LogoutBtn = document.querySelector('#logout');
+const SignUpmodal = document.querySelector('#modal-signup');
 
 logOutBtn.style.display = "none";
 
 
 
-const modals = document.querySelectorAll('.modal');
 document.addEventListener('DOMContentLoaded', function () {
+  const modals = document.querySelectorAll('.modal');
   M.Modal.init(modals, { dismissible: true });
+
+  window.addEventListener('click', function (e) {
+    if (e.target.classList.contains('modal')) {
+      closeAllModals();
+    }
+  });
 });
 
 function closeAllModals() {
+  const modals = document.querySelectorAll('.modal');
+
   modals.forEach(modalElement => {
     const instance = M.Modal.getInstance(modalElement);
-    
-    if (instance) {
+    if (instance && instance.isOpen) {
       instance.close();
-    } 
+    }
   });
 }
 
@@ -70,7 +78,7 @@ onAuthStateChanged(auth, (user) => {
   setupUI(user)
   saveUserToFirestore(user);
   loadAllChatUsers();
-    closeAllModals()
+  closeAllModals()
   const MessageIcon = document.getElementById("message-btn");
   if (MessageIcon) {
     MessageIcon.addEventListener("click", () => {
@@ -205,7 +213,7 @@ function updateUserProfile(user) {
 async function saveUserToFirestore(user) {
   if (!user) return;
 
-  
+
   await setDoc(
     doc(db, "userData", user.uid),
     {
@@ -219,3 +227,9 @@ async function saveUserToFirestore(user) {
   );
 }
 
+
+
+// window.addEventListener('click', (e) => {
+//   closeAllModals()
+//   console.log("clicked")
+// })
