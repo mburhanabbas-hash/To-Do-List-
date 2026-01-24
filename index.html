@@ -19,7 +19,8 @@
             style="display: flex; align-items: last baseline; justify-content: space-between; padding-top: 9px;">
             <div style="display: flex; align-items: center;">
                 <a class="brand-logo">
-                    <img class="" style="width:50px ;" src="./images/7a597180-bb00-49ac-ae1a-238a42b0951f_removalai_preview (2).png">
+                    <img class="" style="width:50px ;"
+                        src="./images/7a597180-bb00-49ac-ae1a-238a42b0951f_removalai_preview (2).png">
                 </a>
                 <span class="Planit-logo" style="font-size: 24px; padding-left: 4px;">
                     PlanIt
@@ -52,11 +53,13 @@
             </div>
 
         </div>
-
+    
     </nav>
 
-
-    <img class="cartoon-img" style="width: 200px; position:absolute;right: 100px; bottom: 30px;  " src="./images/slazzer-preview-xsq7e.png ">
+    <div class="pendulum-pivot">
+        <img class="cartoon-img" style="width: 200px; position:absolute;right: 100px; bottom: 30px;  "
+            src="./images/slazzer-preview-xsq7e.png ">
+    </div>
     <!-- SIGN UP MODAL -->
     <div id="modal-signup" class="modal">
         <div class="containerss"
@@ -95,6 +98,7 @@
                             </svg>
                             <input class="email-input" id="signup-email" type="email" placeholder="Email">
                         </div>
+                        <!-- <span id="emailverify-message"></span> -->
                         <div class="Email-section">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                 <path fill="black"
@@ -105,7 +109,7 @@
                         </div>
                     </div>
                     <div style="display: flex; justify-content: flex-end;padding-right: 8px;">
-                        <span style="font-size: 12px;" class="forgetpass">Forget Password?</span>
+                        <span style="font-size: 12px;" class="forgetpass" id="forgetpass"> Forget Password?</span>
                     </div>
                     <span class="Error-div" id="signup-error">
                         Choose a Strong Password
@@ -113,6 +117,8 @@
                     <div class="startbtn-div">
                         <button class="GetStartBtn">Sign Up</button>
                     </div>
+                    <!-- <span id="resendVerification " style="cursor: pointer;">Resend Verification Email</span> -->
+
                 </form>
 
 
@@ -223,13 +229,15 @@
 
     <div class="contain" style="margin-top: 40px;">
         <!-- TOP SECTION -->
+      
         <div class="top-section " style="display: flex; align-items: last baseline;" id="mr-top">
             <form class="Main-form" action="" method="post" style="display: flex; align-items: center;">
                 <div>
                     <input class="main-input" id="user-data-typed" type="text" placeholder="Task Add To be Done..">
                 </div>
                 <div class="select-input">
-                    <select id="day" name="day" style="padding: 5px; width: 110px; display: flex !important; border-color: #F0F0F0 ;border-radius: 5px;">
+                    <select id="day" name="day"
+                        style="padding: 5px; width: 110px; display: flex !important; border-color: #F0F0F0 ;border-radius: 5px;">
                         <option value="">Select day</option>
                         <option value="Monday">Monday</option>
                         <option value="Tuesday">Tuesday</option>

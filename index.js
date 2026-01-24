@@ -8,6 +8,8 @@ import {
   signOut,
   getRedirectResult,
   GoogleAuthProvider,
+  sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithPopup,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import {
@@ -74,40 +76,57 @@ const setupUI = (user) => {
 };
 
 onAuthStateChanged(auth, (user) => {
-  // if (!user) return;
-  setupUI(user)
-  saveUserToFirestore(user);
-  loadAllChatUsers();
-  closeAllModals()
+  if (user && !user.emailVerified) {
+    // alert("Verify your emial to contin.");
+    setupUI(null);
+    return;
+  }
   const MessageIcon = document.getElementById("message-btn");
-  if (MessageIcon) {
+  if (user) {
     MessageIcon.addEventListener("click", () => {
       window.location.href = "chat.html";
+      MessageIcon.style.display = "block"
+
       console.log("kakak")
     });
   }
+  if (!user) {
+    MessageIcon.style.display = "none"
+  }
 
+  setupUI(user);
+  saveUserToFirestore(user);
+  loadAllChatUsers();
+  closeAllModals();
+  updateUserProfile(user)
 });
+
+
 
 SignUpForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const email = SignUpForm['signup-email'].value;
   const password = SignUpForm['signup-password'].value;
-  const errorContainer = document.getElementById("signup-error")
+  const errorContainer = document.getElementById("signup-error");
+
   try {
-    await createUserWithEmailAndPassword(auth, email, password);
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+
+    await sendEmailVerification(cred.user);
+
+    alert("Verification email sent. Please verify before logging in.");
+
+    await signOut(auth);
 
     const modal = document.querySelector('#modal-signup');
     const instance = M.Modal.getInstance(modal);
     if (instance) instance.close();
-
     SignUpForm.reset();
   } catch (error) {
     console.error(error.message);
-    errorContainer.style.display = "block"
+    errorContainer.style.display = "block";
   }
-  StoringUserDetails(email, password)
 });
 
 LoginForm.addEventListener("submit", async (e) => {
@@ -115,10 +134,17 @@ LoginForm.addEventListener("submit", async (e) => {
 
   const email = LoginForm['login-email'].value;
   const password = LoginForm['login-password'].value;
-  const LoginError = document.getElementById('Error-Login')
+  const LoginError = document.getElementById('Error-Login');
 
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    const cred = await signInWithEmailAndPassword(auth, email, password);
+
+
+    if (!cred.user.emailVerified) {
+      alert("Please verify your email before logging in.");
+      await signOut(auth);
+      return;
+    }
 
     const modal = document.querySelector('#modal-login');
     const instance = M.Modal.getInstance(modal);
@@ -127,8 +153,9 @@ LoginForm.addEventListener("submit", async (e) => {
     LoginForm.reset();
   } catch (error) {
     console.error("Invalid email or password");
-    LoginError.style.display = "block"
+    LoginError.style.display = "block";
   }
+
   StoringUserDetails(email, password)
 
 });
@@ -161,9 +188,22 @@ const UserPasswordStoring = document.getElementById('UserPassword')
 function StoringUserDetails(UserEmail, UserPassword) {
   UserEmailStoring.innerHTML = UserEmail
   UserPasswordStoring.innerHTML = UserPassword
-
 }
 
+const ForgetPass = document.getElementById("forgetpass")
+ForgetPass.onclick = function forgetpass() {
+  const email = document.getElementById("signup-email").value
+  sendPasswordResetEmail(auth, email)
+    .then(() => {
+      alert("Check your email . email reset link has been sent");
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error("Error sending email:", errorCode, errorMessage);
+    });
+
+}
 
 
 const provider = new GoogleAuthProvider();
@@ -191,19 +231,21 @@ function updateUserProfile(user) {
 
   const photoDp = document.getElementById("userProfilepicture").src = user.photoURL;
   console.log(photoDp);
+  if (photoDp === null) {
+    document.getElementById("userProfilepicture").src = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+  }
 
   UserEmailStoring.textContent = userEmail;
   console.log(UserName);
   console.log(userEmail);
 
-  const UserChattingData = {
-    UserNameInchat: UserName,
-    Profilepicture: photoDp
-  }
+  //   const UserChattingData = {
+  //     UserNameInchat: UserName,
+  //     Profilepicture: photoDp
+  //   }
 
-  const ChatUserName = document.getElementById('UserName')
-  ChatUserName.innerText = UserName;
-  console.log(UserName)
+  //   const ChatUserName = document.getElementById('UserName')
+  //   ChatUserName.innerText = UserName;
 
 
 }
@@ -229,7 +271,5 @@ async function saveUserToFirestore(user) {
 
 
 
-// window.addEventListener('click', (e) => {
-//   closeAllModals()
-//   console.log("clicked")
-// })
+
+
