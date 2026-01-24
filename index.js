@@ -90,9 +90,9 @@ onAuthStateChanged(auth, (user) => {
       console.log("kakak")
     });
   }
-  if (!user) {
-    MessageIcon.style.display = "none"
-  }
+  // if (!user) {
+  //   MessageIcon.style.display = "none"
+  // }
 
   setupUI(user);
   saveUserToFirestore(user);
